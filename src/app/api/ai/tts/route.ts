@@ -36,6 +36,7 @@ export async function POST(request: Request) {
                 headers: {
                     "Authorization": `Bearer ${apiKey}`,
                     "Content-Type": "application/json",
+                    "model": "s1",
                 },
                 responseType: "arraybuffer",
             }
