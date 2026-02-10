@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: voice-broadcast-agent
+    env: node
+    plan: free
+    buildCommand: npm install && prisma generate && next build
+    startCommand: prisma db push && next start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: voice-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: FISH_AUDIO_API_KEY
+        sync: false
+      - key: NEXT_PUBLIC_TELEGRAM_BOT_USERNAME
+        sync: false
+      - key: NEXT_PUBLIC_BASE_URL
+        sync: false
+
+databases:
+  - name: voice-db
+    plan: free
