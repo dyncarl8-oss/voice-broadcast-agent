@@ -156,12 +156,25 @@ export default function NewPostPage() {
                                     Generate Voice
                                 </button>
                                 {audioUrl && (
-                                    <button
-                                        onClick={() => new Audio(audioUrl).play()}
-                                        className="p-2 border border-blue-200 dark:border-blue-900 text-blue-600 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all"
-                                    >
-                                        <Play size={24} />
-                                    </button>
+                                    <div className="flex flex-col gap-2 p-3 bg-blue-50 dark:bg-blue-900/10 rounded-xl border border-blue-100 dark:border-blue-900/30">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs font-medium text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                                                <Play size={12} /> Preview Voice
+                                            </span>
+                                            <button
+                                                onClick={() => setAudioUrl("")}
+                                                className="text-xs text-gray-400 hover:text-red-500 transition-colors"
+                                            >
+                                                Clear
+                                            </button>
+                                        </div>
+                                        <audio
+                                            src={audioUrl}
+                                            controls
+                                            className="w-full h-8"
+                                            onError={() => setError("Error playing audio file. Please try generating it again.")}
+                                        />
+                                    </div>
                                 )}
                             </div>
 
