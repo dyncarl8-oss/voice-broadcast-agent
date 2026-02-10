@@ -1,0 +1,383 @@
+ROLE & GOAL
+
+You are a senior full-stack engineer and product architect.
+
+Your task is to build a production-ready MVP web application that allows:
+
+Users to connect their Telegram account via a bot (opt-in)
+
+An admin / creator dashboard where the admin can:
+
+Write a post/update
+
+Generate an AI summary
+
+Generate a voice summary using Fish Audio TTS
+
+Send the summary via Telegram DM (text + audio) to all connected users
+
+A user dashboard where users can:
+
+Click “Connect Telegram”
+
+See connection status
+
+Disconnect Telegram at any time
+
+This MVP is NOT Whop-related.
+It is a standalone web app used only for testing and validation.
+
+TECH STACK (MANDATORY)
+
+Use the following stack only:
+
+Frontend
+
+Next.js 14 (App Router)
+
+React
+
+Tailwind CSS
+
+Server Actions where appropriate
+
+Backend
+
+Next.js API routes (or Route Handlers)
+
+Node.js
+
+Prisma ORM
+
+PostgreSQL (or SQLite for local dev)
+
+AI
+
+OpenAI (or Gemini) for text summarization
+
+Fish Audio TTS for voice generation
+
+Integrations
+
+Telegram Bot API
+
+Telegram deep-linking (t.me/bot?start=token)
+
+CORE FEATURES (MVP SCOPE)
+1. Authentication (Simple)
+
+Simple email + password auth OR magic link
+
+No OAuth providers needed
+
+Roles:
+
+ADMIN
+
+USER
+
+2. Telegram Connection Flow (CRITICAL)
+UX Requirements
+
+Button: “Connect Telegram”
+
+One click → opens Telegram
+
+User taps Start
+
+Connection is completed automatically
+
+Technical Flow
+
+Generate a secure, unique connection token
+
+Redirect user to:
+
+https://t.me/<BOT_USERNAME>?start=<TOKEN>
+
+
+Telegram bot receives:
+
+telegram_user_id
+
+username
+
+first_name
+
+TOKEN
+
+Backend matches token → user
+
+Store Telegram connection
+
+Constraints
+
+Bot must only message users who opted in
+
+Users can disconnect anytime
+
+3. Admin / Creator Dashboard
+Admin Capabilities
+
+Create a post:
+
+Title
+
+Full content (rich text optional)
+
+Click “Generate Summary”
+
+Edit summary if needed
+
+Click “Generate Voice Summary”
+
+Preview audio
+
+Click “Send to Telegram”
+
+When sending:
+
+Send text summary
+
+Send voice summary (Fish Audio TTS)
+
+Send to all connected users
+
+4. AI Summary Engine
+Requirements
+
+Prompt optimized for:
+
+Short
+
+Clear
+
+Actionable
+
+Telegram-friendly
+
+Support:
+
+Trading updates
+
+Announcements
+
+General creator updates
+
+5. Fish Audio TTS Integration
+Requirements
+
+Convert AI summary → voice
+
+Output:
+
+.mp3 or .ogg
+
+Store audio file temporarily
+
+Send as Telegram voice message
+
+Handle errors gracefully
+
+6. Telegram Messaging System
+Message Format
+📢 New Update
+
+<AI summary text>
+
+🎧 Voice summary attached
+
+Must use:
+
+sendMessage
+
+sendVoice
+
+Must handle:
+
+Rate limits
+
+Failures per user (do not crash entire send)
+
+DATABASE SCHEMA (REQUIRED)
+
+Design Prisma models for:
+
+User
+
+id
+
+email
+
+password_hash
+
+role
+
+createdAt
+
+TelegramConnection
+
+id
+
+userId
+
+telegramUserId
+
+telegramUsername
+
+connectedAt
+
+isActive
+
+Post
+
+id
+
+title
+
+content
+
+summary
+
+audioUrl
+
+createdAt
+
+sentAt
+
+PAGES & ROUTES (MANDATORY)
+Public
+
+/login
+
+/register
+
+User
+
+/dashboard
+
+Telegram connection status
+
+Connect / Disconnect button
+
+Admin
+
+/admin
+
+/admin/posts
+
+/admin/posts/new
+
+API
+
+/api/telegram/webhook
+
+/api/telegram/send
+
+/api/ai/summarize
+
+/api/ai/tts
+
+TELEGRAM BOT REQUIREMENTS
+
+Use webhooks (not polling)
+
+Secure webhook endpoint
+
+Validate Telegram requests
+
+Parse /start <token> correctly
+
+Respond with confirmation message:
+
+“✅ Telegram connected successfully. You’ll now receive updates.”
+
+UX & UI REQUIREMENTS
+
+Clean, minimal, creator-tool aesthetic
+
+Clear status indicators:
+
+Connected ✅
+
+Not connected ❌
+
+Admin actions must have:
+
+Loading states
+
+Success / error feedback
+
+NON-FUNCTIONAL REQUIREMENTS
+
+Code must be:
+
+Clean
+
+Modular
+
+Commented
+
+Environment variables:
+
+TELEGRAM_BOT_TOKEN
+
+GEMINI_API_KEY
+
+FISH_AUDIO_API_KEY
+
+Include setup instructions
+
+Include .env.example
+
+OUTPUT EXPECTATIONS
+
+You must generate:
+
+Full project structure
+
+Prisma schema
+
+Core backend logic
+
+Telegram bot integration
+
+AI summary prompt
+
+Fish Audio TTS integration
+
+Minimal but complete UI
+
+Clear instructions to run locally
+
+IMPORTANT CONSTRAINTS
+
+Do NOT over-engineer
+
+Do NOT add unnecessary features
+
+MVP must be usable within 1–2 days of dev
+
+Focus on validation, not polish
+
+FINAL OBJECTIVE
+
+The final app must allow me to:
+
+Create a user
+
+Connect my Telegram account
+
+Log in as admin
+
+Post an update
+
+Receive:
+
+Telegram DM
+
+AI summary
+
+Voice summary
+
+If this works, the MVP is successful.
