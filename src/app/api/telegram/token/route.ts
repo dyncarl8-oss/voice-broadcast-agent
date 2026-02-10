@@ -13,16 +13,26 @@ export async function POST() {
         const token = crypto.randomBytes(16).toString("hex");
         const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-        await prisma.user.update({
-            where: { id: session.userId },
-            data: {
-                connectionToken: token,
-                connectionTokenExpires: expires,
-            },
-        });
+        try {
+            await prisma.user.update({
+                where: { id: session.userId },
+                data: {
+                    connectionToken: token,
+                    connectionTokenExpires: expires,
+                },
+            });
+        } catch (error: any) {
+            if (error.code === 'P2025') {
+                return NextResponse.json(
+                    { error: "Session invalid. Please log out and log back in to refresh your account." },
+                    { status: 400 }
+                );
+            }
+            throw error;
+        }
 
         return NextResponse.json({ token });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Token generation error:", error);
         return NextResponse.json(
             { error: "Internal server error" },
