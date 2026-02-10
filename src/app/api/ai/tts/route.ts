@@ -52,7 +52,7 @@ export async function POST(request: Request) {
         const filePath = join(publicDir, fileName);
         await writeFile(filePath, Buffer.from(response.data));
 
-        const audioUrl = `/temp/${fileName}`;
+        const audioUrl = `/api/ai/tts/serve/${fileName}`;
 
         return NextResponse.json({ audioUrl });
     } catch (error: any) {

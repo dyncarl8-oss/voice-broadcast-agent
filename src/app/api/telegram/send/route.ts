@@ -33,11 +33,18 @@ export async function POST(request: Request) {
 
                 // Send Voice Summary if exists
                 if (audioUrl) {
-                    // Note: In a real app, this URL needs to be publicly accessible by Telegram
-                    // Since we are running locally, we might need a tunnel like ngrok
-                    // For MVP, we'll try to send it if possible, or skip if local
-                    const fullAudioUrl = `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}${audioUrl}`;
-                    await sendVoice(conn.telegramUserId, fullAudioUrl, "🎧 Voice summary");
+                    const filename = audioUrl.split('/').pop();
+                    if (filename) {
+                        const { readFile } = await import("fs/promises");
+                        const { join } = await import("path");
+                        const filePath = join(process.cwd(), "public", "temp", filename);
+                        try {
+                            const fileBuffer = await readFile(filePath);
+                            await sendVoice(conn.telegramUserId, fileBuffer, "🎧 Voice summary");
+                        } catch (err) {
+                            console.error(`Failed to read audio file for user ${conn.userId}:`, err);
+                        }
+                    }
                 }
 
                 return { success: true, userId: conn.userId };

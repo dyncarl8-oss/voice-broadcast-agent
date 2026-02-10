@@ -11,10 +11,25 @@ export async function sendMessage(chatId: string, text: string) {
     });
 }
 
-export async function sendVoice(chatId: string, voiceUrl: string, caption?: string) {
+export async function sendVoice(chatId: string, voice: string | Buffer, caption?: string) {
+    if (typeof voice === "string" && !voice.startsWith("http")) {
+        // If it's a local path or placeholder, it might fail here if not handled
+        // But for now we assume it's a URL or we'll pass a Buffer from the route
+    }
+
+    if (Buffer.isBuffer(voice)) {
+        const formData = new FormData();
+        formData.append("chat_id", chatId);
+        const blob = new Blob([new Uint8Array(voice)], { type: "audio/mpeg" });
+        formData.append("voice", blob, "voice.mp3");
+        if (caption) formData.append("caption", caption);
+
+        return await axios.post(`${BASE_URL}/sendVoice`, formData);
+    }
+
     return await axios.post(`${BASE_URL}/sendVoice`, {
         chat_id: chatId,
-        voice: voiceUrl,
+        voice: voice,
         caption: caption,
     });
 }
