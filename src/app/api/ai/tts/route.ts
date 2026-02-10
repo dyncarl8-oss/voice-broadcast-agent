@@ -29,8 +29,9 @@ export async function POST(request: Request) {
             {
                 text: text,
                 format: "mp3",
-                // Default voice or specify one if needed
-                reference_id: "71933f6782804b31a89c9df43d4c382f", // A common premium voice ID
+                reference_id: "ed034792a388487a8aacd213ff1cf51d",
+                latency: "normal",
+                normalize: true,
             },
             {
                 headers: {
