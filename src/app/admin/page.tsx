@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { logout } from "@/lib/auth";
 import { Plus, MessageSquare, History } from "lucide-react";
+import BotSetupButton from "@/components/BotSetupButton";
 
 export default async function AdminDashboardPage() {
     const session = await getSession();
@@ -37,7 +38,7 @@ export default async function AdminDashboardPage() {
             </nav>
 
             <main className="max-w-6xl mx-auto p-8 space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 flex items-center gap-4">
                         <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
                             <MessageSquare size={24} />
@@ -56,6 +57,9 @@ export default async function AdminDashboardPage() {
                             <div className="text-2xl font-bold dark:text-white">{connectionCount}</div>
                         </div>
                     </div>
+
+                    <BotSetupButton />
+
                     <Link
                         href="/admin/posts/new"
                         className="bg-black dark:bg-white p-6 rounded-2xl shadow-sm flex items-center justify-center gap-2 text-white dark:text-black hover:opacity-90 transition-all font-bold text-lg"

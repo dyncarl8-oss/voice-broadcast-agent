@@ -5,10 +5,13 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        console.log("Telegram Webhook Body:", JSON.stringify(body, null, 2));
+        console.log("Telegram Webhook Received:", JSON.stringify(body, null, 2));
 
         const message = body.message;
-        if (!message) return NextResponse.json({ ok: true });
+        if (!message) {
+            console.log("Webhook received but no message found (likely setup/update notification)");
+            return NextResponse.json({ ok: true });
+        }
 
         const chatId = message.chat.id.toString();
         const text = message.text || "";
